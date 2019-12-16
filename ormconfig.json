@@ -1,0 +1,21 @@
+{
+   "type": "postgres",
+   "host": "db",
+   "port": 5432,
+   "database": "cricfantasy",
+   "username": "example",
+   "password": "example",
+   "synchronize": true,
+   "logging": false,
+   "migrationsTableName": "migration",
+   "entities": [
+      "src/entity/**/*.ts"
+   ],
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration"
+   }
+}

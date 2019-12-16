@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+
+lib/
+build/
+dist/
+
+tmp/
+temp/
+data/
+
+node_modules/
