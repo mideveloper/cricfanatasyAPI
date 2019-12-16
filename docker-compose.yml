@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  db:
+    image: postgres:11.6
+    restart: always
+    environment:
+      POSTGRES_DB: cricfantasy
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+    volumes:
+      - "./data/example:/var/lib/postgresql/data"
+
+
+  api:
+    container_name: api
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - db
+
