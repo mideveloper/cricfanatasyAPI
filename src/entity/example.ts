@@ -10,9 +10,9 @@ export class Example extends BaseEntity {
     name: string;
 
     @CreateDateColumn({type: 'timestamp'})
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn({type: 'timestamp'})
-    updatedAt: Date;
+    updated_at: Date;
 
 }

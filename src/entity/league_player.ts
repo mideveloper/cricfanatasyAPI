@@ -1,7 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from "typeorm";
 
 @Entity()
-export class league_player {
+export class league_player extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -15,4 +15,9 @@ export class league_player {
     @Column("int")
     worth: number;
 
+    @CreateDateColumn("timestamp")
+    created_at: Date;
+
+    @UpdateDateColumn("timestamp")
+    updated_at: Date;
 }

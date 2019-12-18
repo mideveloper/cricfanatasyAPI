@@ -14,8 +14,8 @@ export class league extends BaseEntity{
     budget: number;
    
     @CreateDateColumn("timestamp")
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn("timestamp")
-    updatedAt: Date;
+    updated_at: Date;
 }

@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from "typeorm";
 
 export enum player_type {
     batsman = "1",
@@ -8,7 +8,7 @@ export enum player_type {
 }
 
 @Entity()
-export class player {
+export class player extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -26,6 +26,10 @@ export class player {
     @Column("date")
     dob: Date;
 
+    @CreateDateColumn("timestamp")
+    created_at: Date;
 
+    @UpdateDateColumn("timestamp")
+    updated_at: Date;
 }
 
