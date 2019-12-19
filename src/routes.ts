@@ -2,28 +2,43 @@ import * as Router from 'koa-router';
 import { ExampleController } from './controller';
 import { Service } from 'typedi';
 import { AuthController } from './controller/auth';
+import {AuthMiddleware} from "./middleware/auth";
 
 @Service()
 export class Routes {
     constructor(private exampleController: ExampleController,
                 private authController: AuthController) { }
 
-    setupAppRoutes(): Router {
+    setupAppRoutes(): Router[] {
+        return [
+            this.initExampleAPI(),
+            this.initAuthAPI(),
+        ];
+    }
+
+    initExampleAPI(): Router {
         const router = new Router({
-            prefix: '/v1',
+            prefix: '/v1/api/example',
         });
 
-        this.initExampleAPI(router);
-        this.initAuthAPI(router);
+        // TODO: Fix auth middleware
+        // Middlewares
+        //router.use(AuthMiddleware.authorize);
+
+        // Routes
+        router.get('/', (ctx) => this.exampleController.get(ctx));
 
         return router;
     }
 
-    initExampleAPI(router: Router) {
-        router.get('/example', (ctx) => this.exampleController.get(ctx));
-    }
+    initAuthAPI(): Router {
+        const router = new Router({
+            prefix: '/v1/api/auth',
+        });
 
-    initAuthAPI(router: Router) {
-        router.post('/auth/login', (ctx) => this.authController.login(ctx));
+        // Routes
+        router.post('/login', (ctx) => this.authController.login(ctx));
+
+        return router;
     }
 }
