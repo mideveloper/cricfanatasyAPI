@@ -6,7 +6,7 @@ import { User } from '../entity';
 import { UserLoginSchema } from '../validator';
 import { AccessToken } from '../entity/access-token';
 import { UserDTO } from '../entity/user';
-import { COGS_LOGIN_URL } from '../constants';
+import { COGS_LOGIN_URL } from '../util/constants';
 import * as request from 'request-promise';
 
 const logger = pino();

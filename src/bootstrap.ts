@@ -3,8 +3,11 @@ import { createConnection } from 'typeorm';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as pino from 'pino';
-import {Routes} from "./routes";
-import {Container} from "typedi";
+import { Routes } from "./routes";
+import { Container } from "typedi";
+
+import responseMiddleware from './middleware/response/response';
+import errorMiddleware from './middleware/error';
 
 const logger = pino();
 
@@ -37,11 +40,13 @@ export class Bootstrap {
         let app = new Koa();
 
         app.use(bodyParser());
+        app.use(errorMiddleware());
 
         router.forEach((apiRouter: Router) => {
             app
                 .use(apiRouter.routes())
-                .use(apiRouter.middleware());
+                .use(apiRouter.middleware())
+                .use(responseMiddleware());
         });
 
         app.listen(port);

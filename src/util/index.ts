@@ -1,1 +1,1 @@
-export { Response } from './response';
+export { IResponse } from '../middleware/response/IResponse';
