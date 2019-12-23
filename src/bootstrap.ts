@@ -3,6 +3,11 @@ import { createConnection } from 'typeorm';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as pino from 'pino';
+import { Routes } from "./routes";
+import { Container } from "typedi";
+
+import responseMiddleware from './middleware/response/response';
+import errorMiddleware from './middleware/error';
 
 const logger = pino();
 
@@ -29,14 +34,22 @@ export class Bootstrap {
         return Promise.reject(`unable to connect to db`);
     }
 
-    static async createApp(port: number, router: Router): Promise<string> {
-        const app = new Koa();
+    static async createApp(port: number): Promise<string> {
+        let routes: Routes = Container.get(Routes);
+        let router = routes.setupAppRoutes();
+        let app = new Koa();
 
-        app
-            .use(bodyParser())
-            .use(router.routes())
-            .use(router.allowedMethods())
-            .listen(port);
+        app.use(bodyParser());
+        app.use(errorMiddleware());
+
+        router.forEach((apiRouter: Router) => {
+            app
+                .use(apiRouter.routes())
+                .use(apiRouter.middleware())
+                .use(responseMiddleware());
+        });
+
+        app.listen(port);
 
         return Promise.resolve(`server started successfully. Running on port ${port}`);
     }
