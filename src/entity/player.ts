@@ -1,17 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm";
-
-export enum player_type {
-    batsman = "1",
-    bowler = "2",
-    wicketkeeper = "3",
-    allrounder = "4"
-}
+import { player_type } from "../util/enums";
 
 @Entity()
-export class player extends BaseEntity {
+export class Player extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ type: 'int' })
+    player_id: number;
+
+    @Column({ type: 'varchar', length: 200 })
+    full_name: string;
 
     @Column({ type: 'varchar', length: 200 })
     name: string;
@@ -19,11 +19,14 @@ export class player extends BaseEntity {
     @Column({
         type: 'enum',
         enum: player_type,
-        default: player_type.allrounder
+        default: player_type.All_Rounder
     })
     type: player_type;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'varchar', nullable: true })
+    skills: string;
+
+    @Column({ type: 'date', nullable: true })
     dob: Date;
 
     @CreateDateColumn({ type: 'timestamp' })
@@ -32,4 +35,3 @@ export class player extends BaseEntity {
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 }
-

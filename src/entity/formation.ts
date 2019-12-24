@@ -5,11 +5,10 @@ import {
     BaseEntity,
     CreateDateColumn,
     UpdateDateColumn
-} from 'typeorm';
-import { formation } from '../util/enums';
+} from "typeorm";
 
 @Entity()
-export class LeagueTeam extends BaseEntity {
+export class Formation extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -18,10 +17,19 @@ export class LeagueTeam extends BaseEntity {
     name: string;
 
     @Column({ type: 'int' })
-    budget: number;
+    total_player: number;
 
     @Column({ type: 'int' })
-    formation: number
+    batsman: number;
+
+    @Column({ type: 'int' })
+    bowler: number;
+
+    @Column({ type: 'int' })
+    all_rounder: number;
+
+    @Column({ type: 'int' })
+    wicket_keeper: number;
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;

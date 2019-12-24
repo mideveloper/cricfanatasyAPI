@@ -17,6 +17,9 @@ export class LeaguePlayer extends BaseEntity {
     league_id: number;
 
     @Column({ type: 'int' })
+    team_id: number;
+
+    @Column({ type: 'int' })
     player_id: number;
 
     @Column({ type: 'int' })
