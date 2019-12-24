@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    CreateDateColumn,
+    UpdateDateColumn
+} from 'typeorm';
+
 export enum formation {
     formation1 = "1",
     formation2 = "2",
@@ -6,27 +14,27 @@ export enum formation {
 }
 
 @Entity()
-export class league_team extends BaseEntity {
+export class LeagueTeam extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
-    @Column("varchar", { length: 200 })
+
+    @Column({ type: 'varchar', length: 200 })
     name: string;
 
-    @Column("int")
+    @Column({ type: 'int' })
     budget: number;
 
     @Column({
-        type: "enum",
+        type: 'enum',
         enum: formation,
         default: formation.formation1
     })
     formation: formation
 
-    @CreateDateColumn("timestamp")
+    @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
-    @UpdateDateColumn("timestamp")
+    @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 }

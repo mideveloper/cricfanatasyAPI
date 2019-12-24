@@ -1,27 +1,34 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    CreateDateColumn,
+    UpdateDateColumn
+} from "typeorm";
 
 
 @Entity()
-export class league_team_player extends BaseEntity {
+export class LeagueTeamPlayer extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
-    @Column("int")
+
+    @Column({ type: 'int' })
     league_team_id: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     player_id: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     points: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     match_id: number;
 
-    @CreateDateColumn("timestamp")
+    @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
-    @UpdateDateColumn("timestamp")
+    @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 }

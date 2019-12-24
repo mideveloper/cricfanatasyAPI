@@ -1,23 +1,30 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity,CreateDateColumn,UpdateDateColumn} from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    CreateDateColumn,
+    UpdateDateColumn
+} from "typeorm";
 
 
 @Entity()
-export class match extends BaseEntity{
+export class match extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
-    @Column("varchar")
+
+    @Column({ type: 'varchar' })
     title: string;
 
-    @Column("timestamp")
+    @Column({ type: 'timestamp' })
     play_date: Date;
 
 
-    @CreateDateColumn({type: 'timestamp'})
+    @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
-    @UpdateDateColumn({type: 'timestamp'})
+    @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 
 }

@@ -1,49 +1,56 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity,CreateDateColumn,UpdateDateColumn} from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    CreateDateColumn,
+    UpdateDateColumn
+} from "typeorm";
 
 
 @Entity()
-export class match_stats extends BaseEntity{
+export class MatchStats extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
-    @Column("int")
+
+    @Column({ type: 'int' })
     match_id: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     player_id: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     sixes: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     fours: number;
-    
-    @Column("int")
+
+    @Column({ type: 'int' })
     hat_tricks: number;
-    
-    @Column("int")
+
+    @Column({ type: 'int' })
     catches: number;
-    
-    @Column()
+
+    @Column({ type: 'decimal' })
     economy_rate: number;
 
-    @Column("int")
+    @Column({ type: 'int' })
     wickets: number;
-    
-    @Column()
+
+    @Column({ type: 'decimal' })
     strike_rate: number;
 
-    @Column("int")
-    runs : number;
+    @Column({ type: 'int' })
+    runs: number;
 
-    @Column("int")
-    run_outs : number;
+    @Column({ type: 'int' })
+    run_outs: number;
 
-    @CreateDateColumn({type: 'timestamp'})
+    @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
-    @UpdateDateColumn({type: 'timestamp'})
+    @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 
 }

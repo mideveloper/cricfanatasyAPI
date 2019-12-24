@@ -19,7 +19,7 @@ export class AccessToken extends BaseEntity {
     token: string;
 
     @CreateDateColumn({type: 'timestamp'})
-    createdAt: Date;
+    created_at: Date;
 
     @OneToOne((type) => User)
     @JoinColumn()
@@ -29,7 +29,7 @@ export class AccessToken extends BaseEntity {
         return this.createQueryBuilder()
             .delete()
             .from(AccessToken)
-            .where('user = :userId', {userId: user.userId})
+            .where('user = :user_id', {user_id: user.user_id})
             .execute();
     }
 
