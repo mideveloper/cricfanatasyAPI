@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 
 @Entity()
-export class LeaguePlayer extends BaseEntity {
+export class TeamPlayer extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;

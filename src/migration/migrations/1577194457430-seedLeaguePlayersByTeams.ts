@@ -73,7 +73,7 @@ export class seedLeaguePlayersByTeams1577194457430 implements MigrationInterface
             playersDTO.push(dto);
         }
 
-        await getRepository('league_player').save(playersDTO);
+        await getRepository('team_player').save(playersDTO);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
