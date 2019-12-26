@@ -12,27 +12,27 @@ import {
 export class User extends BaseEntity {
 
     @PrimaryColumn()
-    userId: number;
+    user_id: number;
 
     @Column({nullable: true})
-    firstName: string;
+    first_name: string;
 
     @Column({nullable: true})
-    lastName: string;
+    last_name: string;
 
     @Column({nullable: true})
-    username: string;
+    user_name: string;
 
     @Column({nullable: true})
-    profilePicture: string;
+    profile_picture: string;
 
     @CreateDateColumn({type: 'timestamp'})
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn({type: 'timestamp'})
-    updatedAt: Date;
+    updated_at: Date;
 }
 
 export class UserDTO extends User {
-    accessToken: string;
+    access_token: string;
 }

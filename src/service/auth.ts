@@ -4,7 +4,7 @@ import * as pino from 'pino';
 import { Service } from 'typedi';
 import { User } from '../entity';
 import { UserLoginSchema } from '../validator';
-import { AccessToken } from '../entity/access-token';
+import { AccessToken } from '../entity/access_token';
 import { UserDTO } from '../entity/user';
 import { COGS_LOGIN_URL } from '../util/constants';
 import * as request from 'request-promise';
@@ -19,17 +19,17 @@ export class AuthService {
             .then(this.storeUserInfo)
     }
 
-    private async verifyAuthPayload(payload: {username: string, password: string}): Promise<any> {
+    private async verifyAuthPayload(payload: { username: string, password: string }): Promise<any> {
         await UserLoginSchema.validateAsync(payload);
         return Promise.resolve(payload);
     }
 
-    private async cogsAuth(payload: {username: string, password: string}) {
+    private async cogsAuth(payload: { username: string, password: string }) {
         try {
             let result = await request({
                 uri: COGS_LOGIN_URL,
                 method: 'POST',
-                headers: {'content-type': 'application/json'},
+                headers: { 'content-type': 'application/json' },
                 json: true,
                 body: {
                     data: {
@@ -53,17 +53,17 @@ export class AuthService {
                 profilePicture: data['profile-picture-url'],
             };
         } catch (ex) {
-            throw {status: ex.error.errors[0].status, message: ex.error.errors[0].detail};
+            throw { status: ex.error.errors[0].status, message: ex.error.errors[0].detail };
         }
     }
 
     private async storeUserInfo(cogsUser): Promise<UserDTO> {
         let user: User = new User();
-        user.firstName = cogsUser.firstName;
-        user.lastName = cogsUser.lastName;
-        user.username = cogsUser.username;
-        user.userId = cogsUser.employeeId;
-        user.profilePicture = cogsUser.profilePicture;
+        user.first_name = cogsUser.firstName;
+        user.last_name = cogsUser.lastName;
+        user.user_name = cogsUser.username;
+        user.user_id = cogsUser.employeeId;
+        user.profile_picture = cogsUser.profilePicture;
 
         let token: AccessToken = new AccessToken();
         token.token = cogsUser.accessToken;
@@ -76,7 +76,7 @@ export class AuthService {
         await AccessToken.removeByUser(user);
         await token.save();
 
-        let userDTO: UserDTO = Object.assign({accessToken: token.token}, user);
+        let userDTO: UserDTO = Object.assign({ access_token: token.token }, user);
 
         return Promise.resolve(userDTO);
     }

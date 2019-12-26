@@ -1,6 +1,6 @@
 {
    "type": "postgres",
-   "host": "db",
+   "host": "localhost",
    "port": 5432,
    "database": "cricfantasy",
    "username": "example",
@@ -12,10 +12,10 @@
       "src/entity/**/*.ts"
    ],
    "migrations": [
-      "src/migration/**/*.ts"
+      "src/migration/migrations/**/*.ts"
    ],
    "cli": {
       "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration"
+      "migrationsDir": "src/migration/migrations"
    }
 }

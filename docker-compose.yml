@@ -9,9 +9,11 @@ services:
       POSTGRES_DB: cricfantasy
       POSTGRES_USER: example
       POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
     volumes:
       - "./data/example:/var/lib/postgresql/data"
-
+    network_mode: "host"
 
   api:
     container_name: api
@@ -22,4 +24,5 @@ services:
       - .:/usr/app
     depends_on:
       - db
+    network_mode: "host"
 

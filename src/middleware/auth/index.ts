@@ -1,4 +1,4 @@
-import { AccessToken } from '../../entity/access-token';
+import { AccessToken } from '../../entity/access_token';
 import { Context } from 'koa';
 import * as Boom from '@hapi/boom';
 

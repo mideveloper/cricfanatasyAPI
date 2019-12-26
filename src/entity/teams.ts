@@ -7,24 +7,17 @@ import {
     UpdateDateColumn
 } from "typeorm";
 
-
 @Entity()
-export class LeagueTeamPlayer extends BaseEntity {
+export class Team extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'int' })
-    league_team_id: number;
+    league_id: number;
 
-    @Column({ type: 'int' })
-    player_id: number;
-
-    @Column({ type: 'int' })
-    points: number;
-
-    @Column({ type: 'int' })
-    match_id: number;
+    @Column({ type: 'varchar', length: 200 })
+    name: string;
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
