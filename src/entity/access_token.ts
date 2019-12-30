@@ -18,18 +18,21 @@ export class AccessToken extends BaseEntity {
     @Column()
     token: string;
 
-    @CreateDateColumn({type: 'timestamp'})
+    @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
+    @Column("int", { nullable: true })
+    user_id: number;
+
     @OneToOne((type) => User)
-    @JoinColumn()
+    @JoinColumn({name: 'user_id'})
     user: User;
 
     static removeByUser(user: User): Promise<DeleteResult> {
         return this.createQueryBuilder()
             .delete()
             .from(AccessToken)
-            .where('user = :user_id', {user_id: user.user_id})
+            .where('user = :user_id', { user_id: user.user_id })
             .execute();
     }
 

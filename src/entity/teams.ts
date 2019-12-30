@@ -4,8 +4,12 @@ import {
     Column,
     BaseEntity,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn,
+    ManyToOne
 } from "typeorm";
+import { League } from "./league";
 
 @Entity()
 export class Team extends BaseEntity {
@@ -24,4 +28,8 @@ export class Team extends BaseEntity {
 
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
+
+    @ManyToOne((type) => League)
+    @JoinColumn({ name: 'league_id' })
+    league: League;
 }

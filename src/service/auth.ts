@@ -2,26 +2,29 @@
 
 import * as pino from 'pino';
 import { Service } from 'typedi';
-import { User } from '../entity';
 import { UserLoginSchema } from '../validator';
-import { AccessToken } from '../entity/access_token';
 import { UserDTO } from '../entity/user';
 import { COGS_LOGIN_URL } from '../util/constants';
 import * as request from 'request-promise';
+import { UserRepository } from '../repository/user';
+import { AccessTokenRepository } from '../repository/access_token';
 
 const logger = pino();
 
 @Service()
 export class AuthService {
+
+    constructor(private repo: UserRepository, private accessTokenRepo: AccessTokenRepository) { }
+
     async login(data: any): Promise<UserDTO> {
-        return this.verifyAuthPayload(data)
-            .then(this.cogsAuth)
-            .then(this.storeUserInfo)
+        const payload = await this.verifyAuthPayload(data);
+        const cogsUser = await this.cogsAuth(payload);
+        return await this.storeUserInfo(cogsUser);
     }
 
-    private async verifyAuthPayload(payload: { username: string, password: string }): Promise<any> {
+    private async verifyAuthPayload(payload: { username: string, password: string }) {
         await UserLoginSchema.validateAsync(payload);
-        return Promise.resolve(payload);
+        return payload;
     }
 
     private async cogsAuth(payload: { username: string, password: string }) {
@@ -58,26 +61,9 @@ export class AuthService {
     }
 
     private async storeUserInfo(cogsUser): Promise<UserDTO> {
-        let user: User = new User();
-        user.first_name = cogsUser.firstName;
-        user.last_name = cogsUser.lastName;
-        user.user_name = cogsUser.username;
-        user.user_id = cogsUser.employeeId;
-        user.profile_picture = cogsUser.profilePicture;
-
-        let token: AccessToken = new AccessToken();
-        token.token = cogsUser.accessToken;
-        token.user = user;
-
-        // Save or update
-        await user.save();
-
-        // Remove token if present and insert new
-        await AccessToken.removeByUser(user);
-        await token.save();
-
+        const user = await this.repo.save(cogsUser);
+        const token = await this.accessTokenRepo.save({ token: cogsUser.accessToken, user: user });
         let userDTO: UserDTO = Object.assign({ access_token: token.token }, user);
-
         return Promise.resolve(userDTO);
     }
 }

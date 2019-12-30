@@ -4,8 +4,13 @@ import {
     Column,
     BaseEntity,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn,
+    ManyToOne
 } from "typeorm";
+import { Match } from "./match";
+import { Player } from "./player";
 
 
 @Entity()
@@ -53,5 +58,12 @@ export class MatchStats extends BaseEntity {
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 
+    @ManyToOne((type) => Match)
+    @JoinColumn({ name: 'match_id' })
+    match: Match;
+
+    @ManyToOne((type) => Player)
+    @JoinColumn({ name: 'player_id' })
+    player: Player;
 }
 

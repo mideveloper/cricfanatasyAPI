@@ -70,6 +70,7 @@ export class seedLeaguePlayersByTeams1577194457430 implements MigrationInterface
             dto.league_id = 1;
             dto.worth = 1000000;
             dto.team_id = 5;
+            dto.is_active = '1';
             playersDTO.push(dto);
         }
 

@@ -4,9 +4,13 @@ import {
     Column,
     BaseEntity,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn,
+    ManyToOne
 } from 'typeorm';
 import { formation } from '../util/enums';
+import { Formation } from './formation';
 
 @Entity()
 export class LeagueTeam extends BaseEntity {
@@ -21,11 +25,15 @@ export class LeagueTeam extends BaseEntity {
     budget: number;
 
     @Column({ type: 'int' })
-    formation: number
+    formation_id: number
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
+
+    @ManyToOne((type) => Formation)
+    @JoinColumn({name: 'formation_id'})
+    formation: Formation;
 }
