@@ -52,6 +52,15 @@ export class MatchStats extends BaseEntity {
     @Column({ type: 'int' })
     run_outs: number;
 
+    @Column({ type: 'int' })
+    ball_faced: number;
+
+    @Column({ type: 'varchar', length: 50 })
+    over_placed: string;
+
+    @Column({ type: 'int' })
+    run_conceded: number;
+
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
@@ -61,9 +70,5 @@ export class MatchStats extends BaseEntity {
     @ManyToOne((type) => Match)
     @JoinColumn({ name: 'match_id' })
     match: Match;
-
-    @ManyToOne((type) => Player)
-    @JoinColumn({ name: 'player_id' })
-    player: Player;
 }
 

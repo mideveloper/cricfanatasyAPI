@@ -1,12 +1,12 @@
-/* tslint:disable:semicolon */
-
-import * as pino from 'pino';
 import { Service } from 'typedi';
-
-const logger = pino();
+import { MatchStatsRepository } from '../repository/match_stats';
+import { MatchStats } from '../entity/match_stats';
 
 @Service()
 export class MatchStatsService {
-    public async getMatches(matchId: string): Promise<any> {
+    constructor(private repo: MatchStatsRepository) { }
+
+    public async bulkSave(matchStats: MatchStats[]) {
+        return await this.repo.bulkSave(matchStats);
     }
 }
