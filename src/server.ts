@@ -7,8 +7,8 @@ const logger = pino();
 const PORT: number = 3000;
 
 const start = (async () => {
-    let db = Bootstrap.connectDb();
-    let server = Bootstrap.createApp(PORT);
+    let db = await Bootstrap.connectDb();
+    let server = await Bootstrap.createApp(PORT);
 
     let services = [db, server];
 

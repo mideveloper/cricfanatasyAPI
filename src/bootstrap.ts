@@ -1,5 +1,5 @@
 import * as Koa from 'koa';
-import { createConnection } from 'typeorm';
+import { createConnection, useContainer } from 'typeorm';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as pino from 'pino';
@@ -17,6 +17,7 @@ export class Bootstrap {
 
         while (retries > 0) {
             try {
+                useContainer(Container);
                 await createConnection();
                 logger.info(`db connected successfully`);
                 return Promise.resolve(`db connected successfully`);

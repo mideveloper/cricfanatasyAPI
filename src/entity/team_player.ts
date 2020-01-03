@@ -25,6 +25,9 @@ export class TeamPlayer extends BaseEntity {
     @Column({ type: 'int' })
     worth: number;
 
+    @Column({ type: 'bit', nullable: true, default: '1' })
+    is_active: Boolean;
+
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 

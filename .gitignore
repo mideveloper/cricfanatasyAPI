@@ -11,3 +11,4 @@ temp/
 data/
 
 node_modules/
+last_cron_time.txt
