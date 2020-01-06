@@ -18,7 +18,7 @@ export class MatchService {
     return await this.repo.update(match);
   }
 
-  public async getAllMatchesSchedule(): Promise<Match[]> {
-    return await this.repo.getAllMatchesSchedule();
+  public getAllMatchesSchedule(league_id: number): Promise<Match[]> {
+    return this.repo.getAllMatchesSchedule(league_id);
   }
 }

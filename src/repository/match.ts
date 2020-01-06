@@ -29,7 +29,9 @@ export class MatchRepository {
     return await this.repository.save(match);
   }
 
-  public async getAllMatchesSchedule(): Promise<Match[]> {
-    return await this.repository.find();
+  public getAllMatchesSchedule(league_id: number): Promise<Match[]> {
+    return this.repository.find({
+      where: { league_id: league_id }
+    });
   }
 }

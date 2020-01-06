@@ -13,7 +13,9 @@ export class MatchController {
   constructor(private matchService: MatchService) {}
 
   async getAllMatchesSchedule(ctx: Context, next: () => void) {
-    let match: Match[] = await this.matchService.getAllMatchesSchedule();
+    let match: Match[] = await this.matchService.getAllMatchesSchedule(
+      ctx.params.id
+    );
     ctx.state.data = match;
     await next();
   }

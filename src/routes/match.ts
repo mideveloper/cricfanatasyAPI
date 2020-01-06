@@ -14,7 +14,7 @@ export class Match {
     });
 
     // Routes
-    router.get("/schedule", (ctx, next) =>
+    router.get("/schedule/:id", (ctx, next) =>
       this.matchController.getAllMatchesSchedule(ctx, next)
     );
 
