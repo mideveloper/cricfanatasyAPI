@@ -13,9 +13,6 @@ export class Match {
       prefix: BASE_API_PREFIX + "matches"
     });
 
-    // Middlewares
-    router.use(authentication);
-
     // Routes
     router.get("/schedule", (ctx, next) =>
       this.matchController.getAllMatchesSchedule(ctx, next)
