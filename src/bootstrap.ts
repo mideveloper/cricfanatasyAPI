@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import { createConnection, useContainer } from 'typeorm';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
+import * as cors from 'koa-cors';
 import * as pino from 'pino';
 import { Routes } from "./routes";
 import { Container } from "typedi";
@@ -42,6 +43,7 @@ export class Bootstrap {
 
         app.use(bodyParser());
         app.use(errorMiddleware());
+        app.use(cors());
 
         router.forEach((apiRouter: Router) => {
             app

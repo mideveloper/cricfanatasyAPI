@@ -4,7 +4,7 @@ import { Bootstrap } from './bootstrap';
 import * as pino from 'pino';
 
 const logger = pino();
-const PORT: number = 3000;
+const PORT: number = 8000;
 
 const start = (async () => {
     let db = await Bootstrap.connectDb();
