@@ -10,11 +10,11 @@ export class Match {
 
   init(): Router {
     const router = new Router({
-      prefix: BASE_API_PREFIX + "matches"
+      prefix: BASE_API_PREFIX + "match"
     });
 
     // Routes
-    router.get("/schedule/:id", (ctx, next) =>
+    router.get("/schedule/:league_id", (ctx, next) =>
       this.matchController.getAllMatchesSchedule(ctx, next)
     );
 

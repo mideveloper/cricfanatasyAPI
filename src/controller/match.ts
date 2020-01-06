@@ -14,7 +14,7 @@ export class MatchController {
 
   async getAllMatchesSchedule(ctx: Context, next: () => void) {
     let match: Match[] = await this.matchService.getAllMatchesSchedule(
-      ctx.params.id
+      ctx.params.league_id
     );
     ctx.state.data = match;
     await next();
