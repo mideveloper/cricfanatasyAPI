@@ -1,17 +1,18 @@
-import * as Router from 'koa-router';
-import { Service } from 'typedi';
-import { Auth } from './auth';
-import { Example } from './example';
+import * as Router from "koa-router";
+import { Service } from "typedi";
+import { Auth } from "./auth";
+import { Example } from "./example";
+import { Match } from "./match";
 
 @Service()
 export class Routes {
-    constructor(private auth: Auth,
-        private example: Example) { }
+  constructor(
+    private auth: Auth,
+    private example: Example,
+    private match: Match
+  ) {}
 
-    setupAppRoutes(): Router[] {
-        return [
-            this.auth.init(),
-            this.example.init()
-        ];
-    }
+  setupAppRoutes(): Router[] {
+    return [this.auth.init(), this.example.init(), this.match.init()];
+  }
 }
