@@ -12,9 +12,16 @@ const logger = pino();
 export class LeagueController {
   constructor(private leagueService: LeagueService) {}
 
-  async getAllMatchesSchedule(ctx: Context, next: () => void) {
-    console.log(ctx.request.query);
-    let league: League = await this.leagueService.getAllLeague(
+  async getAllLeagues(ctx: Context, next: () => void) {
+    let leagues: League[] = await this.leagueService.getAllLeagues(
+      ctx.request.query
+    );
+    ctx.state.data = leagues;
+    await next();
+  }
+
+  async getLeagueById(ctx: Context, next: () => void) {
+    let league: League = await this.leagueService.getLeagueById(
       ctx.params.league_id
     );
     ctx.state.data = league;

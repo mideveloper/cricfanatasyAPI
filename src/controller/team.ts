@@ -12,8 +12,8 @@ const logger = pino();
 export class TeamController {
   constructor(private teamService: TeamService) {}
 
-  async getAllTeamsByLeagueId(ctx: Context, next: () => void) {
-    let team: Team[] = await this.teamService.getAllTeams(
+  async getTeamsByLeagueId(ctx: Context, next: () => void) {
+    let team: Team[] = await this.teamService.getTeamsByLeagueId(
       ctx.params.league_id
     );
     ctx.state.data = team;
