@@ -7,7 +7,7 @@ import { Team } from "../entity/team";
 export class TeamService {
   constructor(private repo: TeamRepository) {}
 
-  public getAllTeams(league_id: number): Promise<Team[]> {
-    return this.repo.getAllTeams(league_id);
+  public getTeamsByLeagueId(league_id: number): Promise<Team[]> {
+    return this.repo.getTeamsByLeagueId(league_id);
   }
 }

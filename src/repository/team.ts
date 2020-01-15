@@ -10,7 +10,7 @@ const logger = pino();
 export class TeamRepository {
   constructor(@InjectRepository(Team) private repository: Repository<Team>) {}
 
-  public getAllTeams(league_id: number): Promise<Team[]> {
+  public getTeamsByLeagueId(league_id: number): Promise<Team[]> {
     return this.repository.find({ where: { league_id } });
   }
 }

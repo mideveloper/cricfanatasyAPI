@@ -17,11 +17,14 @@ export class League {
     });
 
     // Routes
+    router.get("/", (ctx, next) =>
+      this.leagueController.getAllLeagues(ctx, next)
+    );
     router.get("/:league_id", (ctx, next) =>
-      this.leagueController.getAllMatchesSchedule(ctx, next)
+      this.leagueController.getLeagueById(ctx, next)
     );
     router.get("/:league_id/teams", (ctx, next) =>
-      this.teamController.getAllTeamsByLeagueId(ctx, next)
+      this.teamController.getTeamsByLeagueId(ctx, next)
     );
 
     return router;
