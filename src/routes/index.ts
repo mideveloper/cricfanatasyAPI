@@ -5,7 +5,6 @@ import { Example } from "./example";
 import { Match } from "./match";
 import { Formation } from "./formation";
 import { League } from "./league";
-import { Team } from "./team";
 
 @Service()
 export class Routes {
@@ -15,7 +14,6 @@ export class Routes {
     private match: Match,
     private formation: Formation,
     private league: League,
-    private team: Team
   ) {}
 
   setupAppRoutes(): Router[] {
@@ -25,7 +23,6 @@ export class Routes {
       this.match.init(),
       this.formation.init(),
       this.league.init(),
-      this.team.init()
     ];
   }
 }
