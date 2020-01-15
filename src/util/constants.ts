@@ -5,4 +5,3 @@ export const CRICINGIF_URL = {
     BASE_URL: 'https://webapi.cricingif.com/api',
     FULL_SCORE_CARD: '/matches/{matchId}/fullscorecard'
 }
-export const CURRENT_LEAGUE_ID = 1
