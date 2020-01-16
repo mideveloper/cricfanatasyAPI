@@ -1,10 +1,11 @@
-import * as Router from "koa-router";
-import { Service } from "typedi";
-import { Auth } from "./auth";
-import { Example } from "./example";
-import { Match } from "./match";
-import { Formation } from "./formation";
-import { League } from "./league";
+import * as Router from 'koa-router';
+import { Service } from 'typedi';
+import { Auth } from './auth';
+import { Example } from './example';
+import { Match } from './match';
+import { Formation } from './formation';
+import { League } from './league';
+import { TeamPlayer } from './team_player';
 
 @Service()
 export class Routes {
@@ -14,6 +15,7 @@ export class Routes {
     private match: Match,
     private formation: Formation,
     private league: League,
+    private teamPlayer: TeamPlayer,
   ) {}
 
   setupAppRoutes(): Router[] {
@@ -23,6 +25,7 @@ export class Routes {
       this.match.init(),
       this.formation.init(),
       this.league.init(),
+      this.teamPlayer.init(),
     ];
   }
 }
