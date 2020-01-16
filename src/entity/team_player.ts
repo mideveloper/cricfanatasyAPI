@@ -4,8 +4,11 @@ import {
     Column,
     BaseEntity,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    ManyToOne,
+    JoinColumn
 } from "typeorm";
+import { PlayersCategory } from "./players_category";
 
 @Entity()
 export class TeamPlayer extends BaseEntity {
@@ -22,8 +25,8 @@ export class TeamPlayer extends BaseEntity {
     @Column({ type: 'int' })
     player_id: number;
 
-    @Column({ type: 'int' })
-    worth: number;
+    @Column({ type: 'int', nullable: true, default: null })
+    category_id: number;
 
     @Column({ type: 'bit', nullable: true, default: '1' })
     is_active: Boolean;
@@ -33,4 +36,8 @@ export class TeamPlayer extends BaseEntity {
 
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
+
+    @ManyToOne((type) => PlayersCategory)
+    @JoinColumn({ name: 'category_id' })
+    playerCategory: PlayersCategory;
 }
