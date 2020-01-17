@@ -29,9 +29,9 @@ services:
       - db
     entrypoint: 
       - ./entrypoint.sh
-      - npm 
-      - run 
-      - start
+      - ./node_modules/.bin/nodemon
+      - --inspect=0.0.0.0
+      - ./bin/server
 
 volumes: 
   postgres: ~

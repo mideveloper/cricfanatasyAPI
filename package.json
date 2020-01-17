@@ -4,16 +4,24 @@
    "description": "cricket fantasy api",
    "main": "server.js",
    "scripts": {
-      "start": "./node_modules/nodemon/bin/nodemon.js --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/server.ts",
       "start-cron": "./node_modules/nodemon/bin/nodemon.js --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/crons/index.ts",
-      "lint": "./node_modules/tslint/bin/tslint src/**/*.ts src/*.ts",
-      "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run"
+      "start": "node bin/server",
+      "debug": "node --inspect=0.0.0.0 bin/server",
+      "watch": "nodemon --inspect=0.0.0.0 bin/server",
+      "lint": "tslint 'src/**/*.ts'",
+      "lint:fix": "tslint 'src/**/*.ts' --fix",
+      "pretest": "npm run lint",
+      "migration:create": "./node_modules/.bin/typeorm migration:create -n",
+      "migration:generate": "ts-node node_modules/typeorm/cli.js migration:generate -n",
+      "migration:run": "ts-node ./node_modules/typeorm/cli.js  migration:run --transaction=each",
+      "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
    },
    "author": "talha khan",
    "license": "ISC",
    "dependencies": {
       "@hapi/boom": "^8.0.1",
       "@hapi/joi": "^16.1.4",
+      "convict": "^5.2.0",
       "cron": "^1.7.2",
       "koa": "^2.8.1",
       "koa-bodyparser": "^4.2.1",
@@ -25,12 +33,13 @@
       "reflect-metadata": "^0.1.10",
       "request": "^2.88.0",
       "request-promise": "^4.2.5",
-      "ts-node": "^8.4.1",
+      "ts-node": "^8.6.2",
       "typedi": "^0.8.0",
-      "typeorm": "0.2.19",
+      "typeorm": "0.2.22",
       "typeorm-typedi-extensions": "^0.2.3"
    },
    "devDependencies": {
+      "@types/convict": "^4.2.1",
       "@types/cron": "^1.7.1",
       "@types/hapi__boom": "^7.4.1",
       "@types/jest": "^24.0.18",
