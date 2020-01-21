@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { PlayersCategory } from './players_category';
 import { Player } from './player';
+import { Team } from './team';
 
 @Entity()
 export class TeamPlayer extends BaseEntity {
@@ -44,4 +45,8 @@ export class TeamPlayer extends BaseEntity {
   @ManyToOne(type => Player)
   @JoinColumn({ name: 'player_id', referencedColumnName: 'player_id' })
   player: Player;
+
+  @ManyToOne(type => Team)
+  @JoinColumn({ name: 'team_id' })
+  team: Team;
 }
