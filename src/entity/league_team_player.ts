@@ -29,24 +29,20 @@ export class LeagueTeamPlayer extends BaseEntity {
     @Column({ type: 'int' })
     points: number;
 
-    @Column({ type: 'int' })
-    match_id: number;
-
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 
+    @Column({ type: 'timestamp' })
+    deleted_at: Date;
+
     @ManyToOne((type) => LeagueTeam)
     @JoinColumn({name: 'league_team_id'})
     league_team: LeagueTeam;
 
     @ManyToOne((type) => Player)
-    @JoinColumn({name: 'player_id'})
+    @JoinColumn({name: 'player_id', referencedColumnName: 'player_id'})
     player: Player;
-
-    @ManyToOne((type) => Match)
-    @JoinColumn({name: 'match_id'})
-    match: Match;
 }

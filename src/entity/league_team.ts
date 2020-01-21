@@ -5,12 +5,12 @@ import {
     BaseEntity,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToOne,
     JoinColumn,
     ManyToOne
 } from 'typeorm';
-import { formation } from '../util/enums';
 import { Formation } from './formation';
+import { League } from './league';
+import { User } from './user';
 
 @Entity()
 export class LeagueTeam extends BaseEntity {
@@ -22,10 +22,19 @@ export class LeagueTeam extends BaseEntity {
     name: string;
 
     @Column({ type: 'int' })
-    budget: number;
+    league_id: number
+
+    @Column({ type: 'int' })
+    total_budget: number;
+
+    @Column({ type: 'int' })
+    remaining_budget: number;
 
     @Column({ type: 'int' })
     formation_id: number
+
+    @Column({ type: 'int' })
+    user_id: number
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
@@ -33,7 +42,18 @@ export class LeagueTeam extends BaseEntity {
     @UpdateDateColumn({ type: 'timestamp' })
     updated_at: Date;
 
+    @Column({ type: 'timestamp' })
+    deleted_at: Date;
+
     @ManyToOne((type) => Formation)
-    @JoinColumn({name: 'formation_id'})
+    @JoinColumn({ name: 'formation_id' })
     formation: Formation;
+
+    @ManyToOne((type) => League)
+    @JoinColumn({ name: 'league_id' })
+    league: League;
+
+    @ManyToOne((type) => User)
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'user_id' })
+    user: User;
 }
