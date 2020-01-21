@@ -3,6 +3,7 @@ import { Service } from 'typedi';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { TeamPlayer } from '../entity/team_player';
+import { GetTeamPlayers } from '../interface';
 
 const logger = pino();
 
@@ -10,8 +11,8 @@ const logger = pino();
 export class TeamPlayerRepository {
   constructor(@InjectRepository(TeamPlayer) private repository: Repository<TeamPlayer>) {}
 
-  public getAllPlayers(leagueId: number): Promise<TeamPlayer[]> {
-    return this.repository
+  public getAllPlayers({ leagueId, teamId }: GetTeamPlayers): Promise<TeamPlayer[]> {
+    let query = this.repository
       .createQueryBuilder('teamplayer')
       .select([
         'player.name as name',
@@ -22,7 +23,12 @@ export class TeamPlayerRepository {
       ])
       .innerJoin('teamplayer.player', 'player')
       .innerJoin('teamplayer.playerCategory', 'playerCategory')
-      .where('teamplayer.league_id = :leagueId', { leagueId })
-      .getRawMany();
+      .where('teamplayer.league_id = :leagueId', { leagueId });
+
+    if (teamId) {
+      query = query.andWhere('teamplayer.team_id = :teamId', { teamId });
+    }
+
+    return query.getRawMany();
   }
 }
