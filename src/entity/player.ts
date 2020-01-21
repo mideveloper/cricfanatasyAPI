@@ -6,7 +6,7 @@ export class Player extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', unique: true })
   player_id: number;
 
   @Column({ type: 'varchar', length: 200 })
