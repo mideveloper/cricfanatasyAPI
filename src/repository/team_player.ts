@@ -20,9 +20,11 @@ export class TeamPlayerRepository {
         'teamplayer.player_id as player_id',
         'playerCategory.worth as worth',
         'player.type as player_type',
+        'team.name as team_name',
       ])
       .innerJoin('teamplayer.player', 'player')
       .innerJoin('teamplayer.playerCategory', 'playerCategory')
+      .innerJoin('teamplayer.team', 'team')
       .where('teamplayer.league_id = :leagueId', { leagueId });
 
     if (teamId) {
