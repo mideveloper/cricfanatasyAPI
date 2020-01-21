@@ -5,6 +5,7 @@ import * as pino from 'pino';
 import { Service } from 'typedi';
 import { TeamPlayerService } from '../service/team_player';
 import { TeamPlayer } from '../entity/team_player';
+import { GetTeamPlayers } from '../interface';
 
 const logger = pino();
 
@@ -13,8 +14,11 @@ export class TeamPlayerController {
   constructor(private teamPlayerService: TeamPlayerService) {}
 
   async getAllPlayers(ctx: Context, next: () => void) {
-    const leagueId = +ctx.params.id;
-    ctx.state.data = await this.teamPlayerService.getAllPlayers(leagueId);
+    const payload: GetTeamPlayers = {
+      leagueId: +ctx.params.id,
+      teamId: +ctx.request.query.teamId,
+    };
+    ctx.state.data = await this.teamPlayerService.getAllPlayers(payload);
     await next();
   }
 }
