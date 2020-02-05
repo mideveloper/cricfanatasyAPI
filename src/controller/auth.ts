@@ -16,6 +16,6 @@ export class AuthController {
         let user: UserDTO = await this.authService.login(ctx.request.body);
         ctx.state.data = user;
         await next();
-        //testing rebase
+        //testing rebase2
     }
 }
