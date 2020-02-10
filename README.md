@@ -1,4 +1,5 @@
 # CricFantasy
+
 CricFantasy back-end API.
 
 ## Prerequisites
@@ -43,12 +44,12 @@ POSTGRES_DB=cricfantasy
 POSTGRES_USER=example
 POSTGRES_PASSWORD=example
 ```
+
 ### debug
 
 1. run `docker-compose -f docker-compose-dev.yml up`
 
-
-2. create launch.json in .vscode folder, and copy following code
+2) create launch.json in .vscode folder, and copy following code
 
 ```
 {
@@ -64,7 +65,7 @@ POSTGRES_PASSWORD=example
             "port": 9229,
             "protocol": "inspector",
             "localRoot": "${workspaceFolder}/src",
-            "remoteRoot": "/usr/src/app/src",
+            "remoteRoot": "/usr/app/src",
             "restart": true
         }
     ]

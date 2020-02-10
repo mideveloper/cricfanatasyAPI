@@ -6,6 +6,7 @@ import { Match } from './match';
 import { Formation } from './formation';
 import { League } from './league';
 import { TeamPlayer } from './team_player';
+import { LeagueTeam } from './league_team';
 
 @Service()
 export class Routes {
@@ -16,6 +17,7 @@ export class Routes {
     private formation: Formation,
     private league: League,
     private teamPlayer: TeamPlayer,
+    private leagueTeam: LeagueTeam,
   ) {}
 
   setupAppRoutes(): Router[] {
@@ -26,6 +28,7 @@ export class Routes {
       this.formation.init(),
       this.league.init(),
       this.teamPlayer.init(),
+      this.leagueTeam.init(),
     ];
   }
 }
