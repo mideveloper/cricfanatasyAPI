@@ -4,21 +4,105 @@ import * as pino from 'pino';
 import { Service } from 'typedi';
 import { LeagueTeamRepository } from '../repository/league_team';
 import { CreateLeagueTeamSchema } from '../validator/league_team';
+import { CreateLeagueTeam } from '../interface/league_team';
+import { TeamPlayerRepository } from '../repository/team_player';
+import { FormationRepository } from '../repository/formation';
+import { badRequest } from '@hapi/boom';
+import { LeagueRepository } from '../repository/league';
+import { player_type } from '../util/enums';
+import { LeagueTeam } from '../entity/league_team';
+import { LeagueTeamPlayer } from '../entity/league_team_player';
 
 const logger = pino();
 
 @Service()
 export class LeagueTeamService {
+  private formation = null;
+  private players = null;
+  private totalBudget = null;
+  private remainingBudget = null;
 
-    constructor(private repo: LeagueTeamRepository) { }
+  constructor(
+    private repo: LeagueTeamRepository,
+    private teamPlayerRepo: TeamPlayerRepository,
+    private formationRepo: FormationRepository,
+    private leagueRepo: LeagueRepository,
+  ) {}
 
-    async create(user: any, data: any): Promise<any> {
-        const payload = await this.verifyCreatePayloadPayload(data);
-        return await null;
+  async create(payload: CreateLeagueTeam): Promise<any> {
+    await this.verifyCreatePayloadPayload(payload);
+
+    [this.formation, this.players, this.totalBudget] = await Promise.all([
+      this.formationRepo.getFormationById(payload.formationId),
+      this.teamPlayerRepo.getPlayersById({ leagueId: payload.leagueId, players: payload.players }),
+      this.leagueRepo.getBudgetByLeagueId(payload.leagueId),
+    ]);
+    this.formationAndBudgetCheck();
+    const leagueTeam = new LeagueTeam();
+    leagueTeam.formation_id = payload.formationId;
+    leagueTeam.name = payload.name;
+    leagueTeam.league_id = payload.leagueId;
+    leagueTeam.remaining_budget = this.remainingBudget;
+    leagueTeam.total_budget = this.totalBudget.budget;
+    leagueTeam.user_id = payload.userId;
+    leagueTeam.leagueTeamPlayers = new Array<LeagueTeamPlayer>();
+    for (const i of this.players) {
+      let player = new LeagueTeamPlayer();
+      player.player_id = i.player_id;
+      player.points = 0;
+      leagueTeam.leagueTeamPlayers.push(player);
+    }
+    return this.repo.create(leagueTeam);
+  }
+
+  private formationAndBudgetCheck() {
+    let selectedBudget = 0;
+    let batsmen = 0;
+    let bowlers = 0;
+    let allRounders = 0;
+    let wicketKeeper = 0;
+
+    this.players.forEach(player => {
+      switch (player.player_type) {
+        case player_type.Batsman:
+          batsmen++;
+          break;
+        case player_type.Bowler:
+          bowlers++;
+          break;
+        case player_type.Wicket_Keeper:
+          wicketKeeper++;
+          break;
+        case player_type.All_Rounder:
+          allRounders++;
+          break;
+        default:
+          break;
+      }
+      selectedBudget += +player.worth;
+    });
+
+    this.remainingBudget = this.totalBudget.budget - selectedBudget;
+
+    if (selectedBudget > this.totalBudget.budget) {
+      throw badRequest('Budget exceeds');
     }
 
-    private async verifyCreatePayloadPayload(payload: any) {
-        await CreateLeagueTeamSchema.validateAsync(payload);
-        return payload;
+    if (
+      this.formation.batsman !== batsmen &&
+      this.formation.bowler !== bowlers &&
+      this.formation.all_rounder !== allRounders &&
+      this.formation.wicket_keeper !== wicketKeeper
+    ) {
+      throw badRequest('Formation does not match');
     }
+  }
+
+  private async verifyCreatePayloadPayload(payload: CreateLeagueTeam) {
+    try {
+      await CreateLeagueTeamSchema.validateAsync(payload);
+    } catch (err) {
+      throw badRequest(err);
+    }
+  }
 }

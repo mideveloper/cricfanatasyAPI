@@ -6,19 +6,19 @@ import { LaegueTeamController } from '../controller/league_team';
 
 @Service()
 export class LeagueTeam {
-    constructor(private laegueTeamController: LaegueTeamController) { }
+  constructor(private laegueTeamController: LaegueTeamController) {}
 
-    init(): Router {
-        const router = new Router({
-            prefix: BASE_API_PREFIX + 'league-team',
-        });
+  init(): Router {
+    const router = new Router({
+      prefix: BASE_API_PREFIX + 'league-team',
+    });
 
-        // Middlewares
-        router.use(authentication);
+    // Middlewares
+    router.use(authentication);
 
-        // Routes
-        router.post('/', (ctx, next) => this.laegueTeamController.create(ctx, next));
+    // Routes
+    router.post('/', (ctx, next) => this.laegueTeamController.create(ctx, next));
 
-        return router;
-    }
+    return router;
+  }
 }
