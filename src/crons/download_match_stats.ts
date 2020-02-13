@@ -1,20 +1,20 @@
 /* tslint:disable:semicolon */
 
 import * as pino from 'pino';
-import Container, { Service } from 'typedi';
+import Container from 'typedi';
 import { MatchService } from '../service/match';
-import * as fs from 'fs';
 import { CricingifService } from '../service/cricingif';
 import { Match } from '../entity/match';
 import { MatchStatsService } from '../service/match_stats';
 import { MatchStats } from '../entity/match_stats';
+import { CronSchedulerService } from '../service/cron_scheduler';
 const logger = pino();
 
 export const initStatsJob = async () => {
     const matchService = Container.get(MatchService);
     const cricingIfService = Container.get(CricingifService);
     try {
-        const lastFetchDate = await readLastCronTimeFromFlie();
+        const lastFetchDate = await getLastFetchDate();
         logger.info('Start dumping stats from: ' + lastFetchDate);
         const payload = {
             fromDate: new Date(lastFetchDate),
@@ -33,10 +33,11 @@ export const initStatsJob = async () => {
                 logger.info('Match Stats Updated For: ' + match.id);
             }
         }
-        await updateLastCronTimeInFile();
+        await updateLastFetchDate('Finish dumping stats from: ' + lastFetchDate);
         logger.info('Finish dumping stats from: ' + lastFetchDate);
     } catch (ex) {
         logger.error(ex);
+        await updateLastFetchDate('ERROR: ' + JSON.stringify(ex));
     }
 }
 
@@ -84,23 +85,20 @@ const saveMatchStats = async (match: Match, matchRes: any): Promise<void> => {
     return await matchStatsService.bulkSave(stats);
 }
 
-const readLastCronTimeFromFlie = async (): Promise<any> => {
-    const filePath = process.cwd() + '/last_cron_time.txt';
-    const exists = await fs.existsSync(filePath);
-    let res = null;
+const getLastFetchDate = async (): Promise<any> => {
+    const cronSchedulerService = Container.get(CronSchedulerService);
+    const exists = await cronSchedulerService.getLastFetch();
+    let res = new Date(new Date().setFullYear(2001, 1, 1)).toISOString();
     if (exists) {
-        res = await fs.readFileSync(filePath, { encoding: 'utf8' });
-    } else {
-        const date = new Date(new Date().setFullYear(2001, 1, 1)).toISOString();
-        await fs.writeFileSync(filePath, date, { encoding: 'utf8' });
-        res = date;
+        res = exists.last_fetch_date.toISOString();
     }
     return res;
 }
 
-const updateLastCronTimeInFile = async (): Promise<any> => {
+const updateLastFetchDate = async (message: string): Promise<any> => {
     const date = new Date();
-    return await fs.writeFileSync(process.cwd() + '/last_cron_time.txt', date.toISOString(), { encoding: 'utf8' });
+    const cronSchedulerService = Container.get(CronSchedulerService);
+    return cronSchedulerService.saveLastFetchDate({ date: date, message: message });
 }
 
 const calculateEconmyRate = (runConceded, overPlaced) => {
