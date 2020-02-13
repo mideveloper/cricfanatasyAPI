@@ -10,8 +10,7 @@ import {
     ManyToOne
 } from "typeorm";
 import { Match } from "./match";
-import { Player } from "./player";
-
+import { League } from "./league";
 
 @Entity()
 export class MatchStats extends BaseEntity {
@@ -21,6 +20,9 @@ export class MatchStats extends BaseEntity {
 
     @Column({ type: 'int' })
     match_id: number;
+
+    @Column({ type: 'int' })
+    league_id: number;
 
     @Column({ type: 'int' })
     player_id: number;
@@ -61,6 +63,9 @@ export class MatchStats extends BaseEntity {
     @Column({ type: 'int', default: 0 })
     run_conceded: number;
 
+    @Column({ type: 'int', default: 0, nullable: true })
+    points: number;
+
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
@@ -70,5 +75,9 @@ export class MatchStats extends BaseEntity {
     @ManyToOne((type) => Match)
     @JoinColumn({ name: 'match_id' })
     match: Match;
+
+    @ManyToOne((type) => League)
+    @JoinColumn({ name: 'league_id' })
+    league: League;
 }
 

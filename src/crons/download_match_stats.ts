@@ -64,6 +64,7 @@ const saveMatchStats = async (match: Match, matchRes: any): Promise<void> => {
             if (playerResult) {
                 const stat = {
                     match_id: match.id,
+                    league_id: match.league_id,
                     player_id: playerResult.pl,
                     sixes: playerResult.s || 0,
                     fours: playerResult.f || 0,
@@ -77,7 +78,11 @@ const saveMatchStats = async (match: Match, matchRes: any): Promise<void> => {
                     hat_tricks: 0,
                     catches: 0,
                     run_outs: 0,
+                    points: 0
                 };
+
+                stat.points = calculatePoints(stat as MatchStats);
+
                 stats.push(stat as MatchStats);
             }
         }
@@ -113,4 +118,62 @@ const calculateStrikeRate = (runs, ballFaced) => {
     const xballFaced = ballFaced || '0.0';
 
     return ((parseFloat(xruns) / parseFloat(xballFaced)) * 100);
+}
+
+const calculatePoints = (stats: MatchStats): number => {
+    let points = 0;
+
+    points += stats.sixes;
+    points += stats.fours;
+    points += stats.runs;
+
+    // Batting Points calculation 
+    // points calculate on the basis of score
+    if (stats.runs >= 30 && stats.runs < 50) {
+        points += 20;
+    } else if (stats.runs >= 50 && stats.runs < 100) {
+        points += 50;
+    } else if (stats.runs >= 100) {
+        points += 150;
+    }
+
+    // plus points on the basis of strike rate
+    if (stats.strike_rate < 100) {
+        points -= 10;
+    } else if (stats.strike_rate >= 100 && stats.strike_rate <= 150) {
+        points += 10;
+    } else if (stats.strike_rate > 150 && stats.strike_rate <= 200) {
+        points += 20;
+    } else if (stats.strike_rate > 200) {
+        points += 30;
+    }
+    // End Batting Points calculation
+
+    // Bowling Points calculation
+    // points calculate on the basis of wickets
+    points += stats.wickets * 20;
+    if (stats.wickets === 4) {
+        points += 150;
+    } else if (stats.wickets >= 5) {
+        points += 200;
+    }
+
+    // points calculate on the basis of econmy rate
+    if (stats.economy_rate <= 6) {
+        points += 30;
+    } else if (stats.economy_rate > 6 && stats.economy_rate <= 7) {
+        points += 15;
+    } else if (stats.economy_rate >= 8 && stats.economy_rate <= 9) {
+        points -= 10;
+    } else if (stats.economy_rate > 9) {
+        points -= 20;
+    }
+
+    // points calculate on the basis of hat trick
+    if (stats.hat_tricks) {
+        points += 200;
+    }
+    // End Bowler Points calculation
+
+    return points;
 }
