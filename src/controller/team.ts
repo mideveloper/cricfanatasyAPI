@@ -19,4 +19,12 @@ export class TeamController {
     ctx.state.data = team;
     await next();
   }
+  
+  async getLeagerBoardByLeague(ctx: Context, next: () => void) {
+    let leagerboard: any[] = await this.teamService.getLeagerBoardByLeague(
+      ctx.params.league_id
+    );
+    ctx.state.data = leagerboard;
+    await next();
+  }
 }

@@ -23,8 +23,13 @@ export class League {
     router.get("/:league_id", (ctx, next) =>
       this.leagueController.getLeagueById(ctx, next)
     );
+    
     router.get("/:league_id/teams", (ctx, next) =>
       this.teamController.getTeamsByLeagueId(ctx, next)
+    );
+
+    router.get("/:league_id/leaderboard", (ctx, next) =>
+      this.teamController.getLeagerBoardByLeague(ctx, next)
     );
 
     return router;
