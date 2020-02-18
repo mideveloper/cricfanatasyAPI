@@ -16,6 +16,7 @@ export class TeamPlayerRepository {
     let query = this.repository
       .createQueryBuilder('teamplayer')
       .select([
+        'player.id as id',
         'player.name as name',
         'teamplayer.team_id as team_id',
         'teamplayer.player_id as player_id',
