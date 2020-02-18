@@ -48,7 +48,6 @@ export class Bootstrap {
     router.forEach((apiRouter: Router) => {
       app
         .use(apiRouter.routes())
-        .use(apiRouter.middleware())
         .use(responseMiddleware());
     });
 
