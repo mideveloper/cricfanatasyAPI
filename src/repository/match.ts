@@ -8,7 +8,7 @@ const logger = pino();
 
 @Service()
 export class MatchRepository {
-  constructor(@InjectRepository(Match) private repository: Repository<Match>) {}
+  constructor(@InjectRepository(Match) private repository: Repository<Match>) { }
 
   public async getByDateForStats(payload: {
     fromDate?: Date;
@@ -31,7 +31,8 @@ export class MatchRepository {
 
   public getAllMatchesSchedule(league_id: number): Promise<Match[]> {
     return this.repository.find({
-      where: { league_id: league_id }
+      where: { league_id: league_id },
+      order: { play_date: 'ASC' }
     });
   }
 }

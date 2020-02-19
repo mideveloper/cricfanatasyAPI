@@ -57,4 +57,9 @@ export class LeagueTeamRepository {
       .andWhere("league_id = :league_id", { league_id });
     return builder.getRawMany();
   }
+
+  public getLeagueTeamByName(league_name: String): Promise<any> {
+    return this.repository.createQueryBuilder('leagueTeam')
+      .where({ name: league_name }).getOne();
+  }
 }

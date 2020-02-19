@@ -27,7 +27,7 @@ export class LeagueTeamService {
     private teamPlayerRepo: TeamPlayerRepository,
     private formationRepo: FormationRepository,
     private leagueRepo: LeagueRepository,
-  ) {}
+  ) { }
 
   async getByUser(userId: number): Promise<any> {
     return this.repo.getByUser(userId);
@@ -36,7 +36,20 @@ export class LeagueTeamService {
   async create(payload: CreateLeagueTeam): Promise<any> {
     await this.verifyCreatePayloadPayload(payload);
 
-    if(payload.id) {
+    const leag = await this.leagueRepo.getLeagueById(payload.leagueId);
+    const league_date = new Date(leag.start_date + ' 18:00:00');
+    if (new Date() > league_date) {
+      throw badRequest('Team cannot be editable after league start.');
+    }
+
+    const exists_team = await this.repo.getLeagueTeamByName(payload.name.trim());
+    if (exists_team) {
+      if (exists_team.id != payload.id) {
+        throw badRequest('Team name aready exists');
+      }
+    }
+
+    if (payload.id) {
       await this.repo.delete(Number(payload.id));
     }
 
@@ -48,7 +61,7 @@ export class LeagueTeamService {
     this.formationAndBudgetCheck();
     const leagueTeam = new LeagueTeam();
     leagueTeam.formation_id = payload.formationId;
-    leagueTeam.name = payload.name;
+    leagueTeam.name = payload.name.trim();
     leagueTeam.league_id = payload.leagueId;
     leagueTeam.remaining_budget = this.remainingBudget;
     leagueTeam.total_budget = this.totalBudget.budget;
