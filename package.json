@@ -4,7 +4,7 @@
   "description": "cricket fantasy api",
   "main": "server.js",
   "scripts": {
-    "start-cron": "./node_modules/nodemon/bin/nodemon.js --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/crons/index.ts",
+    "cron": "node bin/cron",
     "start": "node bin/server",
     "debug": "node --inspect=0.0.0.0 bin/server",
     "watch": "nodemon --inspect=0.0.0.0 bin/server",

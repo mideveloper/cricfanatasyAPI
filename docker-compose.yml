@@ -31,6 +31,23 @@ services:
       - run
       - start
 
+  etl:
+    container_name: cric-fantacy-etl
+    env_file:
+      - src/conf/env/.env
+    build: .
+    networks:
+      - cric-fantacy-api
+    ports:
+      - '8001:8001'
+    depends_on:
+      - db
+    entrypoint:
+      - ./entrypoint.sh
+      - npm
+      - run
+      - cron
+
 volumes:
   postgres: ~
 
