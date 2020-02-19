@@ -6,7 +6,7 @@ import { LaegueTeamController } from '../controller/league_team';
 
 @Service()
 export class LeagueTeam {
-  constructor(private laegueTeamController: LaegueTeamController) {}
+  constructor(private leagueTeamController: LaegueTeamController) {}
 
   init(): Router {
     const router = new Router({
@@ -17,7 +17,11 @@ export class LeagueTeam {
     router.use(authentication);
 
     // Routes
-    router.post('/', (ctx, next) => this.laegueTeamController.create(ctx, next));
+    router.post('/', (ctx, next) => this.leagueTeamController.create(ctx, next));
+
+    router.get('/', (ctx, next) => {
+      return this.leagueTeamController.getByUser(ctx, next)
+    });
 
     return router;
   }

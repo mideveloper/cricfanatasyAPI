@@ -29,8 +29,16 @@ export class LeagueTeamService {
     private leagueRepo: LeagueRepository,
   ) {}
 
+  async getByUser(userId: number): Promise<any> {
+    return this.repo.getByUser(userId);
+  }
+
   async create(payload: CreateLeagueTeam): Promise<any> {
     await this.verifyCreatePayloadPayload(payload);
+
+    if(payload.id) {
+      await this.repo.delete(Number(payload.id));
+    }
 
     [this.formation, this.players, this.totalBudget] = await Promise.all([
       this.formationRepo.getFormationById(payload.formationId),
