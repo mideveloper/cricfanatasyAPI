@@ -47,15 +47,28 @@ export class LeagueTeamRepository {
   }
 
   public getLeagerBoardByLeague(league_id: number): Promise<any[]> {
-    const builder = this.repository.createQueryBuilder('leagueTeam')
-      .select([
-        'leagueTeam.id as id',
-        'leagueTeam.name as name',
-        'user.first_name as user_name'
-      ])
-      .innerJoin('leagueTeam.user', 'user')
-      .andWhere("league_id = :league_id", { league_id });
-    return builder.getRawMany();
+
+    return this.repository.query('SELECT lt.id AS id, lt.name AS name, u.first_name AS user_name,' +
+      '(' +
+      ' SELECT SUM(ms.points) AS points FROM match_stats ms' +
+      ' WHERE ms.player_id IN(' +
+      'SELECT p.player_id FROM league_team_player ltp' +
+      ' INNER JOIN player p ON p.id = ltp.player_id' +
+      ' WHERE ltp.league_team_id = lt.id' +
+      '  ) AND ms.league_id = ' + league_id + ' AND ms.created_at > lt.created_at' +
+      ') AS points' +
+      ' FROM league_team lt ' +
+      'INNER JOIN "user" u ON u.user_id = lt.user_id WHERE lt.league_id = ' + league_id + ' order by points desc')
+
+    // const builder = this.repository.createQueryBuilder('leagueTeam')
+    //   .select([
+    //     'leagueTeam.id as id',
+    //     'leagueTeam.name as name',
+    //     'user.first_name as user_name'
+    //   ])
+    //   .innerJoin('leagueTeam.user', 'user')
+    //   .andWhere("league_id = :league_id", { league_id });
+    // return builder.getRawMany();
   }
 
   public getLeagueTeamByName(league_name: String): Promise<any> {
