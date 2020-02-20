@@ -36,10 +36,12 @@ export class LeagueTeamService {
   async create(payload: CreateLeagueTeam): Promise<any> {
     await this.verifyCreatePayloadPayload(payload);
 
-    const leag = await this.leagueRepo.getLeagueById(payload.leagueId);
-    const league_date = new Date(leag.start_date + ' 18:00:00');
-    if (new Date() > league_date) {
-      throw badRequest('Team cannot be editable after league start.');
+    if (payload.id && payload.id > 0) {
+      const leag = await this.leagueRepo.getLeagueById(payload.leagueId);
+      const league_date = new Date(leag.start_date + ' 18:00:00');
+      if (new Date() > league_date) {
+        throw badRequest('Team cannot be editable after league start.');
+      }
     }
 
     const exists_team = await this.repo.getLeagueTeamByName(payload.name.trim());
