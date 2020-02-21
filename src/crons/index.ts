@@ -9,7 +9,7 @@ const logger = pino();
 
 function init() {
     new CronJob({
-        cronTime: '0 */1 * * * *',
+        cronTime: '0 */5 * * * *',
         onTick: initStatsJob,
         start: true
     });

@@ -28,7 +28,7 @@ export const initStatsJob = async () => {
             let match = matches[i];
             logger.info('Start processing for match : ' + match.id);
             const matchRes = await cricingIfService.getScoreCardByMatch(match.match_id.toString());
-            if (matchRes.cc) {
+            if (matchRes.cs) {
                 await updateMatch(match, matchRes);
                 logger.info('Match Results Updated: ' + match.id);
                 await saveMatchStats(match, matchRes);
@@ -45,11 +45,33 @@ export const initStatsJob = async () => {
 
 const updateMatch = async (match: Match, matchRes: any): Promise<Match> => {
     const matchService = Container.get(MatchService);
-    match.match_result = matchRes.cc;
-    match.team_1_score = matchRes.t1ts;
-    match.team_2_score = matchRes.t2ts;
-    match.team_1_overs = matchRes.t1o;
-    match.team_2_overs = matchRes.t2o;
+    match.match_result = matchRes.cs;
+    let t1Id = null, t2Id = null;
+    if (matchRes.t1.t.trim() == match.team_1.trim()) {
+        t1Id = matchRes.t1.Id;
+    }
+    if (matchRes.t2.t.trim() == match.team_2.trim()) {
+        t2Id = matchRes.t2.Id;
+    }
+
+    if (matchRes.in && matchRes.in.length) {
+        if (matchRes.in[0].bt === t1Id) {
+            match.team_1_score = matchRes.in[0].ts;
+            match.team_1_overs = matchRes.in[0].ov;
+        } else if (matchRes.in[0].bt === t2Id) {
+            match.team_2_score = matchRes.in[0].ts;
+            match.team_2_overs = matchRes.in[0].ov;
+        }
+
+        if (matchRes.in[1].bt === t2Id) {
+            match.team_2_score = matchRes.in[1].ts;
+            match.team_2_overs = matchRes.in[1].ov;
+        } else if (matchRes.in[1].bt === t1Id) {
+            match.team_1_score = matchRes.in[1].ts;
+            match.team_1_overs = matchRes.in[1].ov;
+        }
+    }
+
     match.is_stats_fetch = '1';
     return await matchService.update(match);
 }
@@ -58,13 +80,13 @@ const saveMatchStats = async (match: Match, matchRes: any): Promise<void> => {
     const matchStatsService = Container.get(MatchStatsService);
     let stats: MatchStats[] = [];
     for (let i = 0; i < matchRes.in.length; i++) {
-        const ining = matchRes.in[i];
-        const playersKeys = Object.keys(ining).filter(key => key.startsWith('ip'));
+        let ining = matchRes.in[i];
+        let playersKeys = Object.keys(ining).filter(key => key.startsWith('ip'));
         for (let pk = 0; pk < playersKeys.length; pk++) {
-            const playerIndex = playersKeys[pk];
-            const playerResult = ining[playerIndex];
+            let playerIndex = playersKeys[pk];
+            let playerResult = ining[playerIndex];
             if (playerResult) {
-                const stat = {
+                let stat = {
                     match_id: match.id,
                     league_id: match.league_id,
                     player_id: playerResult.pl,
