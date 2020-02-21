@@ -50,7 +50,7 @@ export class LeagueTeamRepository {
 
     return this.repository.query('SELECT lt.id AS id, lt.name AS name, u.first_name AS user_name,' +
       '(' +
-      ' SELECT COALESCE(SUM(ms.points)) AS points FROM match_stats ms' +
+      ' SELECT COALESCE(SUM(ms.points), 0) AS points FROM match_stats ms' +
       ' WHERE ms.player_id IN(' +
       'SELECT p.player_id FROM league_team_player ltp' +
       ' INNER JOIN player p ON p.id = ltp.player_id' +
