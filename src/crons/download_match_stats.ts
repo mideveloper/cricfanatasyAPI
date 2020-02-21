@@ -16,9 +16,11 @@ export const initStatsJob = async () => {
     try {
         const lastFetchDate = await getLastFetchDate();
         logger.info('Start dumping stats from: ' + lastFetchDate);
+        const toDate = new Date();
+        toDate.setDate(toDate.getDate() - 1);
         const payload = {
             fromDate: new Date(lastFetchDate),
-            toDate: new Date()
+            toDate: new Date(toDate)
         }
         const matches = await matchService.getByDateForStats(payload);
         logger.info('Todays match found: ' + matches.length);
@@ -95,6 +97,7 @@ const getLastFetchDate = async (): Promise<any> => {
     const exists = await cronSchedulerService.getLastFetch();
     let res = new Date(new Date().setFullYear(2001, 1, 1)).toISOString();
     if (exists) {
+        exists.last_fetch_date.setDate(exists.last_fetch_date.getDate() - 1);
         res = exists.last_fetch_date.toISOString();
     }
     return res;

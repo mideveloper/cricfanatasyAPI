@@ -22,7 +22,10 @@ export class MatchRepository {
       builder.andWhere("play_date <= :toDate");
     }
     builder.andWhere(`is_stats_fetch='0'`);
-    return builder.setParameters(payload).getMany();
+    const datePayload = { fromDate: '', toDate: '' };
+    datePayload.fromDate = payload.fromDate.toISOString().split('T')[0];
+    datePayload.toDate = payload.toDate.toISOString().split('T')[0];
+    return builder.setParameters(datePayload).getMany();
   }
 
   public async update(match: Match): Promise<Match> {
