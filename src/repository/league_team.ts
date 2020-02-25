@@ -48,7 +48,7 @@ export class LeagueTeamRepository {
 
   public getLeagerBoardByLeague(league_id: number): Promise<any[]> {
 
-    return this.repository.query('SELECT lt.id AS id, lt.name AS name, u.first_name AS user_name,' +
+    return this.repository.query("SELECT lt.id AS id, lt.name AS name, CONCAT(u.first_name,' ',u.last_name) AS user_name," +
       '(' +
       ' SELECT COALESCE(SUM(ms.points), 0) AS points FROM match_stats ms' +
       ' WHERE ms.player_id IN(' +
